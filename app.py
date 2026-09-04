@@ -347,31 +347,15 @@ st.markdown("""
         font-size: 0.8rem;
         margin: 3px 5px 3px 0;
     }
-    .option-btn {
-        width: 100%;
-        text-align: left;
-        padding: 12px 16px;
-        border-radius: 10px;
-        border: 2px solid #e8ecf4;
-        background: white;
-        transition: all 0.2s;
-        cursor: pointer;
-        margin: 4px 0;
-    }
-    .option-btn:hover {
-        border-color: #f7971e;
-        background: #fef9e7;
-    }
-    .selected-option {
-        border-color: #f7971e;
-        background: #fef9e7;
-    }
     .qr-container {
         background: #f8f9ff;
         padding: 20px;
         border-radius: 16px;
         text-align: center;
         margin-top: 10px;
+    }
+    .bottom-buttons {
+        margin-top: 20px;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -383,7 +367,7 @@ st.markdown('<div class="sub-title">测一测你是《大耳朵图图》里的�
 # ---------- 侧边栏 ----------
 with st.sidebar:
     st.header("📱 扫码访问")
-    app_url = "https://你的地址.streamlit.app"
+    app_url = "https://hutu-test-ih9koxugfjcycv3xxeahsg.streamlit.app"
     
     try:
         qr = qrcode.QRCode(version=1, box_size=8, border=2)
@@ -449,6 +433,31 @@ if not st.session_state.finished:
                     st.session_state.answers.append(letter)
                     st.session_state.current_q += 1
                     st.rerun()
+
+        # ----- 底部按钮：上一题 + 重新开始 -----
+        st.markdown('<div class="bottom-buttons">', unsafe_allow_html=True)
+        col1, col2, col3 = st.columns([1, 1, 1])
+        with col1:
+            if q_index > 0:
+                if st.button("⬅️ 上一题", use_container_width=True):
+                    # 回退：减去上一题的分数
+                    if st.session_state.answers:
+                        last_answer = st.session_state.answers.pop()
+                        prev_q = QUESTIONS[q_index - 1]
+                        for letter, opt in prev_q["options"].items():
+                            if letter == last_answer:
+                                st.session_state.scores[opt['char_id']] -= 1
+                                break
+                        st.session_state.current_q -= 1
+                        st.rerun()
+        with col3:
+            if st.button("🔄 重新开始", use_container_width=True):
+                st.session_state.current_q = 0
+                st.session_state.scores = {c["id"]: 0 for c in CHARACTERS}
+                st.session_state.answers = []
+                st.session_state.finished = False
+                st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
     else:
         st.session_state.finished = True
         st.rerun()
@@ -460,33 +469,23 @@ else:
     top_id = sorted_scores[0][0]
     top_char = next(c for c in CHARACTERS if c["id"] == top_id)
 
-    # 显示结果
     st.balloons()
     st.markdown("---")
     st.markdown(f'<div class="result-box">', unsafe_allow_html=True)
     st.markdown(f'<div class="name">{top_char["emoji"]} 你是：{top_char["name"]}！</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="label">{top_char["label"]}</div>', unsafe_allow_html=True)
 
-    # 匹配度
     total_score = sum(scores.values())
     if total_score > 0:
         pct = int(scores[top_id] / total_score * 100)
         st.markdown(f"**匹配度：{pct}%**")
         st.progress(pct / 100)
 
-    # 性格标签
     st.markdown("**性格标签：**" + " ".join([f'<span class="tag">{tag}</span>' for tag in top_char["tags"]]), unsafe_allow_html=True)
-
-    # 性格描述
     st.markdown(f'<div class="desc">{top_char["description"]}</div>', unsafe_allow_html=True)
-
-    # 经典语录
     st.markdown(f'<div class="quote">💬 {top_char["quote"]}</div>', unsafe_allow_html=True)
-
-    # 适合职业
     st.markdown(f"**🎯 适合你的职业：**{top_char['career']}")
 
-    # 所有角色排名
     st.markdown("---")
     st.markdown("### 📊 你的角色匹配排名")
     for i, (char_id, score) in enumerate(sorted_scores[:5]):
@@ -496,7 +495,6 @@ else:
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # 分享按钮
     st.markdown("---")
     st.markdown("📤 **分享给朋友，看看ta是翻斗花园的谁？**")
     col1, col2, col3 = st.columns(3)
