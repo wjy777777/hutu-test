@@ -29,7 +29,7 @@ api_key = os.getenv("DEEPSEEK_API_KEY")
 # ---------- 页面配置 ----------
 st.set_page_config(page_title="翻斗花园人格测试", page_icon="🏠", layout="wide")
 
-# ---------- 25道全新题目 ----------
+# ---------- 25道题目 ----------
 QUESTIONS = [
     {
         "q": "周末早上醒来，你第一件事是？",
@@ -283,23 +283,21 @@ st.markdown("""
         margin-bottom: 5px;
         font-weight: 500;
     }
-    .question-number {
-        text-align: center;
-        font-size: 0.85rem;
-        color: #aaa;
-        margin-bottom: 15px;
-    }
     .stButton > button {
         width: 100%;
         background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
         color: white;
-        font-size: 1.1rem;
+        font-size: 1.05rem;
         font-weight: 600;
         padding: 12px 0;
         border: none;
         border-radius: 12px;
         transition: all 0.3s ease;
         box-shadow: 0 4px 15px rgba(247, 151, 30, 0.3);
+        white-space: normal;
+        word-wrap: break-word;
+        height: auto;
+        min-height: 50px;
     }
     .stButton > button:hover {
         transform: translateY(-2px);
@@ -368,37 +366,6 @@ st.markdown("""
     }
     .bottom-buttons {
         margin-top: 25px;
-    }
-    .option-btn {
-        display: block;
-        width: 100%;
-        padding: 14px 18px;
-        margin: 6px 0;
-        border-radius: 12px;
-        border: 2px solid #e8ecf4;
-        background: white;
-        text-align: left;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-    .option-btn:hover {
-        border-color: #f7971e;
-        background: #fef9e7;
-        transform: translateX(4px);
-    }
-    .option-label {
-        display: inline-block;
-        background: #f7971e;
-        color: white;
-        border-radius: 50%;
-        width: 28px;
-        height: 28px;
-        text-align: center;
-        line-height: 28px;
-        font-weight: 700;
-        font-size: 0.85rem;
-        margin-right: 12px;
     }
     .funny-extra {
         margin-top: 15px;
@@ -479,24 +446,20 @@ if not st.session_state.finished:
 
     if q_index < total:
         q_data = QUESTIONS[q_index]
-        # 显示进度 - 修复序号显示（从1开始）
         st.markdown(f'<div class="progress-text">第 {q_index + 1} / {total} 题</div>', unsafe_allow_html=True)
         st.progress((q_index) / total)
 
-        # 显示题目 - 用普通文本不加#
         st.markdown(f'<div style="font-size:1.3rem;font-weight:600;margin:15px 0 10px 0;color:#2d3748;">{q_data["q"]}</div>', unsafe_allow_html=True)
 
         options = q_data["options"]
         letters = list(options.keys())
 
-        # 选项用两列布局
         cols = st.columns(2)
         for i, letter in enumerate(letters):
             opt = options[letter]
             with cols[i % 2]:
-                # 美化选项按钮 - 带字母标签
                 if st.button(
-                    f"<span style='display:inline-block;background:#f7971e;color:white;border-radius:50%;width:28px;height:28px;text-align:center;line-height:28px;font-weight:700;font-size:0.85rem;margin-right:12px;'>{letter}</span> {opt['text']}",
+                    f"{letter}. {opt['text']}",
                     key=f"q{q_index}_{letter}",
                     use_container_width=True
                 ):
@@ -505,7 +468,6 @@ if not st.session_state.finished:
                     st.session_state.current_q += 1
                     st.rerun()
 
-        # ----- 底部按钮：上一题 + 重新开始 -----
         st.markdown('<div class="bottom-buttons">', unsafe_allow_html=True)
         col1, col2, col3 = st.columns([1, 1, 1])
         with col1:
@@ -542,7 +504,6 @@ else:
     total_score = sum(scores.values())
     pct = int(scores[top_id] / total_score * 100) if total_score > 0 else 0
 
-    # 根据匹配度给不同的幽默评价
     if pct >= 60:
         mood = "🎉 亲生的！你就是翻斗花园本园！"
     elif pct >= 45:
@@ -567,7 +528,6 @@ else:
     st.markdown(f'<div class="quote">💬 {top_char["quote"]}</div>', unsafe_allow_html=True)
     st.markdown(f"**🎯 适合你的职业：**{top_char['career']}")
 
-    # 趣味附加信息
     funny_extra = {
         "tutu": "🍔 温馨提示：做这个测试消耗了50卡路里，建议奖励自己一顿好的！",
         "shuazi": "💪 温馨提示：你的气场太强了，建议偶尔也温柔一点～",
