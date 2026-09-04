@@ -29,7 +29,7 @@ api_key = os.getenv("DEEPSEEK_API_KEY")
 # ---------- 页面配置 ----------
 st.set_page_config(page_title="翻斗花园人格测试", page_icon="🏠", layout="wide")
 
-# ---------- 25道全新题目（每道题对应不同角色） ----------
+# ---------- 25道全新题目 ----------
 QUESTIONS = [
     {
         "q": "周末早上醒来，你第一件事是？",
@@ -278,9 +278,16 @@ st.markdown("""
     }
     .progress-text {
         text-align: center;
-        font-size: 0.9rem;
+        font-size: 1rem;
         color: #888;
-        margin-bottom: 10px;
+        margin-bottom: 5px;
+        font-weight: 500;
+    }
+    .question-number {
+        text-align: center;
+        font-size: 0.85rem;
+        color: #aaa;
+        margin-bottom: 15px;
     }
     .stButton > button {
         width: 100%;
@@ -288,14 +295,15 @@ st.markdown("""
         color: white;
         font-size: 1.1rem;
         font-weight: 600;
-        padding: 10px 0;
+        padding: 12px 0;
         border: none;
         border-radius: 12px;
         transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(247, 151, 30, 0.3);
     }
     .stButton > button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(247, 151, 30, 0.4);
+        box-shadow: 0 8px 25px rgba(247, 151, 30, 0.5);
         color: white;
     }
     .footer {
@@ -315,7 +323,7 @@ st.markdown("""
         line-height: 1.9;
     }
     .result-box .name {
-        font-size: 2rem;
+        font-size: 2.2rem;
         font-weight: 700;
         color: #2d3748;
     }
@@ -328,6 +336,10 @@ st.markdown("""
         font-size: 1rem;
         color: #4a5568;
         margin: 15px 0;
+        background: rgba(255,255,255,0.5);
+        padding: 15px 18px;
+        border-radius: 12px;
+        line-height: 1.8;
     }
     .result-box .quote {
         font-size: 1.1rem;
@@ -355,7 +367,58 @@ st.markdown("""
         margin-top: 10px;
     }
     .bottom-buttons {
-        margin-top: 20px;
+        margin-top: 25px;
+    }
+    .option-btn {
+        display: block;
+        width: 100%;
+        padding: 14px 18px;
+        margin: 6px 0;
+        border-radius: 12px;
+        border: 2px solid #e8ecf4;
+        background: white;
+        text-align: left;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .option-btn:hover {
+        border-color: #f7971e;
+        background: #fef9e7;
+        transform: translateX(4px);
+    }
+    .option-label {
+        display: inline-block;
+        background: #f7971e;
+        color: white;
+        border-radius: 50%;
+        width: 28px;
+        height: 28px;
+        text-align: center;
+        line-height: 28px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        margin-right: 12px;
+    }
+    .funny-extra {
+        margin-top: 15px;
+        padding: 12px 16px;
+        background: #fff;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        color: #888;
+        border: 1px dashed #f7971e;
+    }
+    .mood-text {
+        font-size: 1rem;
+        color: #e67e22;
+        margin: 5px 0 10px 0;
+    }
+    .rank-item {
+        padding: 6px 12px;
+        border-radius: 8px;
+        margin: 3px 0;
+        background: rgba(255,255,255,0.6);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -416,19 +479,27 @@ if not st.session_state.finished:
 
     if q_index < total:
         q_data = QUESTIONS[q_index]
-        st.markdown(f'<div class="progress-text">第 {q_index+1} / {total} 题</div>', unsafe_allow_html=True)
+        # 显示进度 - 修复序号显示（从1开始）
+        st.markdown(f'<div class="progress-text">第 {q_index + 1} / {total} 题</div>', unsafe_allow_html=True)
         st.progress((q_index) / total)
 
-        st.markdown(f"### {q_data['q']}")
+        # 显示题目 - 用普通文本不加#
+        st.markdown(f'<div style="font-size:1.3rem;font-weight:600;margin:15px 0 10px 0;color:#2d3748;">{q_data["q"]}</div>', unsafe_allow_html=True)
 
         options = q_data["options"]
         letters = list(options.keys())
 
+        # 选项用两列布局
         cols = st.columns(2)
         for i, letter in enumerate(letters):
             opt = options[letter]
             with cols[i % 2]:
-                if st.button(f"{letter}. {opt['text']}", key=f"q{q_index}_{letter}", use_container_width=True):
+                # 美化选项按钮 - 带字母标签
+                if st.button(
+                    f"<span style='display:inline-block;background:#f7971e;color:white;border-radius:50%;width:28px;height:28px;text-align:center;line-height:28px;font-weight:700;font-size:0.85rem;margin-right:12px;'>{letter}</span> {opt['text']}",
+                    key=f"q{q_index}_{letter}",
+                    use_container_width=True
+                ):
                     st.session_state.scores[opt['char_id']] += 1
                     st.session_state.answers.append(letter)
                     st.session_state.current_q += 1
@@ -468,7 +539,6 @@ else:
     top_id = sorted_scores[0][0]
     top_char = next(c for c in CHARACTERS if c["id"] == top_id)
 
-    # 计算匹配度
     total_score = sum(scores.values())
     pct = int(scores[top_id] / total_score * 100) if total_score > 0 else 0
 
@@ -487,7 +557,7 @@ else:
     st.markdown(f'<div class="result-box">', unsafe_allow_html=True)
     st.markdown(f'<div class="name">{top_char["emoji"]} 你就是：{top_char["name"]}！</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="label">{top_char["label"]}</div>', unsafe_allow_html=True)
-    st.markdown(f'<div style="font-size:0.9rem;color:#888;margin:5px 0;">{mood}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="mood-text">{mood}</div>', unsafe_allow_html=True)
 
     st.markdown(f"**匹配度：{pct}%**")
     st.progress(pct / 100)
@@ -516,7 +586,7 @@ else:
         "wangzi": "🤴 温馨提示：表演欲这么强，建议去学表演！"
     }
 
-    st.markdown(f'<div style="margin-top:15px;padding:10px 16px;background:#fff;border-radius:10px;font-size:0.9rem;color:#888;">😄 {funny_extra.get(top_id, "你真是太有趣了！")}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="funny-extra">😄 {funny_extra.get(top_id, "你真是太有趣了！")}</div>', unsafe_allow_html=True)
 
     st.markdown("---")
     st.markdown("### 📊 你的角色匹配排名")
@@ -524,19 +594,19 @@ else:
         char = next(c for c in CHARACTERS if c["id"] == char_id)
         pct_i = int(score / total_score * 100) if total_score > 0 else 0
         if i == 0:
-            st.markdown(f"🥇 {char['emoji']} {char['name']} — {pct_i}% ⭐ 你就是ta！")
+            st.markdown(f'<div class="rank-item">🥇 {char["emoji"]} <b>{char["name"]}</b> — {pct_i}% ⭐ 你就是ta！</div>', unsafe_allow_html=True)
         elif i == 1:
-            st.markdown(f"🥈 {char['emoji']} {char['name']} — {pct_i}%")
+            st.markdown(f'<div class="rank-item">🥈 {char["emoji"]} <b>{char["name"]}</b> — {pct_i}%</div>', unsafe_allow_html=True)
         elif i == 2:
-            st.markdown(f"🥉 {char['emoji']} {char['name']} — {pct_i}%")
+            st.markdown(f'<div class="rank-item">🥉 {char["emoji"]} <b>{char["name"]}</b> — {pct_i}%</div>', unsafe_allow_html=True)
         else:
-            st.markdown(f"   {i+1}. {char['emoji']} {char['name']} — {pct_i}%")
+            st.markdown(f'<div class="rank-item">   {i+1}. {char["emoji"]} {char["name"]} — {pct_i}%</div>', unsafe_allow_html=True)
 
     st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown("---")
     st.markdown("📤 **分享给朋友，看看ta是翻斗花园的谁？**")
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3 = st.columns([1, 1, 1])
     with col1:
         share_text = f"🏠 我测了翻斗花园人格测试，我是{top_char['name']}！{top_char['emoji']} 快来测测你是《大耳朵图图》里的谁？ 👉 {app_url}"
         st.code(share_text, language="text")
