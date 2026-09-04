@@ -29,231 +29,231 @@ api_key = os.getenv("DEEPSEEK_API_KEY")
 # ---------- 页面配置 ----------
 st.set_page_config(page_title="翻斗花园人格测试", page_icon="🏠", layout="wide")
 
-# ---------- 25道题目 ----------
+# ---------- 25道全新题目（每道题对应不同角色） ----------
 QUESTIONS = [
     {
-        "q": "看到零食柜里最后一包薯片，你会？",
+        "q": "周末早上醒来，你第一件事是？",
         "options": {
-            "A": {"text": "立刻拆开吃掉，快乐最重要", "char_id": "tutu"},
-            "B": {"text": "告诉自己'今天不能吃'，但还是忍不住", "char_id": "mami"},
-            "C": {"text": "无所谓，吃不吃都行", "char_id": "xiaoguai"},
-            "D": {"text": "研究一下配料表再决定", "char_id": "zhuangzhuang"}
+            "A": {"text": "摸手机刷视频，躺到饿得不行才起", "char_id": "tutu"},
+            "B": {"text": "立刻起床，今天有好多事要干！", "char_id": "kuaikuai"},
+            "C": {"text": "继续睡，梦里啥都有", "char_id": "xiaoguai"},
+            "D": {"text": "起床做饭，把全家人都叫起来吃", "char_id": "mami"}
         }
     },
     {
-        "q": "朋友约你去吃自助餐，你会？",
+        "q": "你朋友突然放你鸽子，你会？",
         "options": {
-            "A": {"text": "兴奋地计划'先吃三轮'", "char_id": "tutu"},
-            "B": {"text": "纠结半天'会不会胖'", "char_id": "xiaomei"},
-            "C": {"text": "直接说'不去，人多太吵'", "char_id": "shuazi"},
-            "D": {"text": "去，但默默计算性价比", "char_id": "zhuangzhuang"}
+            "A": {"text": "没事没事，我自己玩也开心", "char_id": "tutu"},
+            "B": {"text": "气死了！下次再也不约ta了！", "char_id": "shuazi"},
+            "C": {"text": "正好，省钱了，回家躺着", "char_id": "xiaoguai"},
+            "D": {"text": "打电话问清楚原因，是不是出事了", "char_id": "xiaomei"}
         }
     },
     {
-        "q": "妈妈在厨房做饭，你会？",
+        "q": "你在餐厅吃饭，发现菜里有根头发，你会？",
         "options": {
-            "A": {"text": "跑进厨房偷吃", "char_id": "tutu"},
-            "B": {"text": "帮忙洗菜切菜", "char_id": "xiaomei"},
-            "C": {"text": "在客厅等着喊'好饿啊'", "char_id": "baba"},
-            "D": {"text": "观察妈妈做饭的步骤", "char_id": "zhuangzhuang"}
+            "A": {"text": "默默挑出来继续吃，不想惹麻烦", "char_id": "niuyeye"},
+            "B": {"text": "立刻叫服务员，严肃投诉", "char_id": "shuazi"},
+            "C": {"text": "拍照发朋友圈，先吐槽再说", "char_id": "tutu"},
+            "D": {"text": "分析一下，这头发是厨师还是服务员的", "char_id": "zhuangzhuang"}
         }
     },
     {
-        "q": "在朋友聚会上，你通常会？",
+        "q": "你最喜欢什么样的朋友？",
         "options": {
-            "A": {"text": "积极带动气氛，话最多的那个", "char_id": "tutu"},
-            "B": {"text": "安静坐着，偶尔插话", "char_id": "xiaomei"},
-            "C": {"text": "坐在角落观察别人", "char_id": "xiaoguai"},
-            "D": {"text": "负责组织游戏和活动", "char_id": "jiankang"}
+            "A": {"text": "能一起吃吃喝喝、嘻嘻哈哈的", "char_id": "tutu"},
+            "B": {"text": "靠谱、能讲真心话的", "char_id": "jiankang"},
+            "C": {"text": "聪明、能教我东西的", "char_id": "zhuangzhuang"},
+            "D": {"text": "讲义气、有事真上的", "char_id": "shuazi"}
         }
     },
     {
-        "q": "朋友遇到困难时，你会？",
+        "q": "你的人生信条更像？",
         "options": {
-            "A": {"text": "冲上去帮忙，哪怕方法不太对", "char_id": "shuazi"},
-            "B": {"text": "冷静分析问题，给出建议", "char_id": "zhuangzhuang"},
-            "C": {"text": "陪在身边，说温暖的话", "char_id": "xiaomei"},
-            "D": {"text": "讲个笑话让ta开心", "char_id": "baba"}
+            "A": {"text": "开心最重要，其他都是浮云", "char_id": "tutu"},
+            "B": {"text": "做人要靠谱，说话要算数", "char_id": "jiankang"},
+            "C": {"text": "要么不做，要做就做到最好", "char_id": "zhuangzhuang"},
+            "D": {"text": "人生苦短，及时行乐", "char_id": "baba"}
         }
     },
     {
-        "q": "你的理想周末是？",
+        "q": "你收拾房间的方式是？",
         "options": {
-            "A": {"text": "和朋友一起疯玩", "char_id": "shuazi"},
-            "B": {"text": "一个人安静待着", "char_id": "xiaoguai"},
-            "C": {"text": "和家人一起看电视", "char_id": "baba"},
-            "D": {"text": "出门探索新地方", "char_id": "kuaikuai"}
+            "A": {"text": "全部堆到一起，眼不见为净", "char_id": "tutu"},
+            "B": {"text": "分门别类，整整齐齐", "char_id": "zhuangzhuang"},
+            "C": {"text": "看心情，心情好了就收拾", "char_id": "xiaomei"},
+            "D": {"text": "不收拾，乱才是家的感觉", "char_id": "baba"}
         }
     },
     {
-        "q": "被人误会在意的事，你会？",
+        "q": "你突然中了一百万，第一件事是？",
         "options": {
-            "A": {"text": "直接怼回去，当场解释清楚", "char_id": "shuazi"},
-            "B": {"text": "气鼓鼓地生闷气", "char_id": "mami"},
-            "C": {"text": "算了，懒得解释", "char_id": "xiaoguai"},
-            "D": {"text": "找机会温和地澄清", "char_id": "xiaomei"}
+            "A": {"text": "先吃顿好的！吃最贵的！", "char_id": "tutu"},
+            "B": {"text": "存起来，好好规划怎么花", "char_id": "zhuangzhuang"},
+            "C": {"text": "分给家人朋友，大家一起开心", "char_id": "xiaomei"},
+            "D": {"text": "买一堆平时舍不得买的东西", "char_id": "baba"}
         }
     },
     {
-        "q": "别人说你'不按常理出牌'，你更可能？",
+        "q": "你最害怕什么事情？",
         "options": {
-            "A": {"text": "觉得挺好，说明我很特别", "char_id": "tutu"},
-            "B": {"text": "生气，我要按自己方式来", "char_id": "mami"},
-            "C": {"text": "反思一下，想想为什么", "char_id": "jiankang"},
-            "D": {"text": "无所谓，继续做自己的事", "char_id": "xiaoguai"}
+            "A": {"text": "饿肚子！没有吃的太可怕了", "char_id": "tutu"},
+            "B": {"text": "失去重要的人", "char_id": "xiaomei"},
+            "C": {"text": "被人看不起、被人忽视", "char_id": "shuazi"},
+            "D": {"text": "计划被打乱、失控的感觉", "char_id": "zhuangzhuang"}
         }
     },
     {
-        "q": "你最受不了别人什么？",
+        "q": "你觉得自己像什么食物？",
         "options": {
-            "A": {"text": "装模作样", "char_id": "shuazi"},
-            "B": {"text": "太吵闹", "char_id": "zhuangzhuang"},
-            "C": {"text": "太凶、说话像刮风", "char_id": "tutu"},
-            "D": {"text": "总爱指挥别人", "char_id": "mami"}
+            "A": {"text": "火锅——热气腾腾，什么都往里加", "char_id": "tutu"},
+            "B": {"text": "冰淇淋——看着冷，其实很甜", "char_id": "xiaomei"},
+            "C": {"text": "辣椒——看着普通，但很有劲儿", "char_id": "shuazi"},
+            "D": {"text": "白米饭——百搭、靠谱、不能少", "char_id": "zhuangzhuang"}
         }
     },
     {
-        "q": "被家人唠叨时，你会？",
+        "q": "你遇到挫折的时候，第一反应是？",
         "options": {
-            "A": {"text": "左耳进右耳出", "char_id": "tutu"},
-            "B": {"text": "认真听完然后照做", "char_id": "zhuangzhuang"},
-            "C": {"text": "怼回去", "char_id": "shuazi"},
-            "D": {"text": "心里烦但不表现出来", "char_id": "xiaomei"}
+            "A": {"text": "先哭一场，哭完再说", "char_id": "xiaomei"},
+            "B": {"text": "骂一句脏话，然后想办法", "char_id": "shuazi"},
+            "C": {"text": "找朋友吐槽，求安慰", "char_id": "tutu"},
+            "D": {"text": "冷静分析问题出在哪里", "char_id": "zhuangzhuang"}
         }
     },
     {
-        "q": "心情不好的时候，你会？",
+        "q": "你最喜欢的一句话是？",
         "options": {
-            "A": {"text": "吃零食，吃开心就好", "char_id": "tutu"},
-            "B": {"text": "一个人待着不说话", "char_id": "xiaoguai"},
-            "C": {"text": "找朋友倾诉", "char_id": "xiaomei"},
-            "D": {"text": "用游戏和运动发泄", "char_id": "jiankang"}
+            "A": {"text": "今天吃啥？", "char_id": "tutu"},
+            "B": {"text": "我相信你能行！", "char_id": "jiankang"},
+            "C": {"text": "人要有骨气，不能怂", "char_id": "shuazi"},
+            "D": {"text": "嗯，让我想想", "char_id": "zhuangzhuang"}
         }
     },
     {
-        "q": "遇到困难时，你第一反应是？",
+        "q": "你出门前会花多长时间？",
         "options": {
-            "A": {"text": "求助身边人", "char_id": "tutu"},
-            "B": {"text": "自己想办法解决", "char_id": "shuazi"},
-            "C": {"text": "冷静分析后行动", "char_id": "zhuangzhuang"},
-            "D": {"text": "先发一顿脾气再说", "char_id": "mami"}
+            "A": {"text": "5分钟，穿上衣服就走", "char_id": "kuaikuai"},
+            "B": {"text": "30分钟，得好好搭配一下", "char_id": "xiaomei"},
+            "C": {"text": "1小时起，选衣服选到崩溃", "char_id": "tutu"},
+            "D": {"text": "看情况，不赶时间就慢慢来", "char_id": "baba"}
         }
     },
     {
-        "q": "有人需要帮助，你第一反应是？",
+        "q": "你最讨厌什么事情？",
         "options": {
-            "A": {"text": "毫不犹豫上前帮忙", "char_id": "jiankang"},
-            "B": {"text": "先观察一下情况", "char_id": "zhuangzhuang"},
-            "C": {"text": "叫上朋友一起帮忙", "char_id": "tutu"},
-            "D": {"text": "觉得麻烦但不好意思拒绝", "char_id": "xiaomei"}
+            "A": {"text": "别人催我", "char_id": "tutu"},
+            "B": {"text": "别人骗我", "char_id": "shuazi"},
+            "C": {"text": "别人唠叨我", "char_id": "xiaoguai"},
+            "D": {"text": "别人浪费我的时间", "char_id": "zhuangzhuang"}
         }
     },
     {
-        "q": "你最看重朋友的什么？",
+        "q": "你觉得自己最大的魅力是什么？",
         "options": {
-            "A": {"text": "讲义气，随叫随到", "char_id": "shuazi"},
-            "B": {"text": "真诚不虚假", "char_id": "jiankang"},
-            "C": {"text": "能一起开心玩", "char_id": "tutu"},
-            "D": {"text": "聪明，能聊得来", "char_id": "zhuangzhuang"}
+            "A": {"text": "我很快乐，跟我待着的人也会快乐", "char_id": "tutu"},
+            "B": {"text": "我很坚强，遇到什么事都能扛住", "char_id": "shuazi"},
+            "C": {"text": "我很温柔，会照顾别人的感受", "char_id": "xiaomei"},
+            "D": {"text": "我很聪明，能帮别人解决问题", "char_id": "zhuangzhuang"}
         }
     },
     {
-        "q": "你的做事风格更像？",
+        "q": "你遇到困难时，会向谁求助？",
         "options": {
-            "A": {"text": "想到就做，不犹豫", "char_id": "kuaikuai"},
-            "B": {"text": "先计划再行动", "char_id": "zhuangzhuang"},
-            "C": {"text": "随心所欲，看心情", "char_id": "tutu"},
-            "D": {"text": "按规矩来，不出错", "char_id": "niuyeye"}
+            "A": {"text": "谁在就找谁，不挑", "char_id": "tutu"},
+            "B": {"text": "找最靠谱的那个朋友", "char_id": "jiankang"},
+            "C": {"text": "自己扛，不想麻烦别人", "char_id": "shuazi"},
+            "D": {"text": "先自己想，想不通再找人", "char_id": "zhuangzhuang"}
         }
     },
     {
-        "q": "有人在你面前炫耀，你会？",
+        "q": "你最喜欢什么季节？",
         "options": {
-            "A": {"text": "直接拆穿ta", "char_id": "shuazi"},
-            "B": {"text": "翻个白眼走开", "char_id": "xiaoguai"},
-            "C": {"text": "默默远离这种人", "char_id": "zhuangzhuang"},
-            "D": {"text": "配合演一下，心里偷笑", "char_id": "baba"}
+            "A": {"text": "夏天——可以吃冰淇淋、吹空调", "char_id": "tutu"},
+            "B": {"text": "秋天——不冷不热，刚刚好", "char_id": "xiaomei"},
+            "C": {"text": "冬天——可以窝在被子里不出来", "char_id": "xiaoguai"},
+            "D": {"text": "春天——万物复苏，充满希望", "char_id": "jiankang"}
         }
     },
     {
-        "q": "你觉得自己最大的优点是？",
+        "q": "你在朋友圈里扮演什么角色？",
         "options": {
-            "A": {"text": "善良单纯", "char_id": "tutu"},
-            "B": {"text": "勇敢直爽", "char_id": "shuazi"},
-            "C": {"text": "聪明冷静", "char_id": "zhuangzhuang"},
-            "D": {"text": "温柔体贴", "char_id": "xiaomei"}
+            "A": {"text": "开心果——负责搞笑和活跃气氛", "char_id": "tutu"},
+            "B": {"text": "大姐大——有事找我我罩你", "char_id": "shuazi"},
+            "C": {"text": "倾听者——耐心听大家倾诉", "char_id": "xiaomei"},
+            "D": {"text": "军师——帮大家出主意", "char_id": "zhuangzhuang"}
         }
     },
     {
-        "q": "你觉得自己最大的缺点是？",
+        "q": "你吃饭的时候最喜欢？",
         "options": {
-            "A": {"text": "太贪吃了", "char_id": "tutu"},
-            "B": {"text": "脾气来得太快", "char_id": "mami"},
-            "C": {"text": "想太多了", "char_id": "zhuangzhuang"},
-            "D": {"text": "太容易相信别人", "char_id": "xiaomei"}
+            "A": {"text": "边吃边说话，嘴巴停不下来", "char_id": "tutu"},
+            "B": {"text": "专心吃饭，享受美食", "char_id": "niuyeye"},
+            "C": {"text": "边吃边看手机", "char_id": "baba"},
+            "D": {"text": "先拍照发朋友圈再吃", "char_id": "xiaomei"}
         }
     },
     {
-        "q": "你的生活态度更像？",
+        "q": "你看到流浪猫会？",
         "options": {
-            "A": {"text": "及时行乐，开心就好", "char_id": "tutu"},
-            "B": {"text": "积极进取，不断突破", "char_id": "kuaikuai"},
-            "C": {"text": "随遇而安，顺其自然", "char_id": "niuyeye"},
-            "D": {"text": "谨慎规划，稳中求进", "char_id": "zhuangzhuang"}
+            "A": {"text": "冲上去摸摸摸，太可爱了", "char_id": "tutu"},
+            "B": {"text": "蹲下看看，等它主动过来", "char_id": "xiaomei"},
+            "C": {"text": "去便利店买根火腿肠喂它", "char_id": "niuyeye"},
+            "D": {"text": "看两眼就走了，不感兴趣", "char_id": "xiaoguai"}
         }
     },
     {
-        "q": "遇到不喜欢的食物，你会？",
+        "q": "你最喜欢的颜色是？",
         "options": {
-            "A": {"text": "直接说不吃", "char_id": "shuazi"},
-            "B": {"text": "皱着眉头吃一点", "char_id": "xiaomei"},
-            "C": {"text": "趁人不注意偷偷倒掉", "char_id": "tutu"},
-            "D": {"text": "分析为什么不喜欢", "char_id": "zhuangzhuang"}
+            "A": {"text": "黄色——看着就开心", "char_id": "tutu"},
+            "B": {"text": "红色——热烈、有力量", "char_id": "shuazi"},
+            "C": {"text": "粉色——温柔、可爱", "char_id": "xiaomei"},
+            "D": {"text": "蓝色——冷静、理性", "char_id": "zhuangzhuang"}
         }
     },
     {
-        "q": "你对待陌生人更像？",
+        "q": "你遇到杠精会怎么办？",
         "options": {
-            "A": {"text": "热情大方，主动搭话", "char_id": "jiankang"},
-            "B": {"text": "保持距离，观察再说", "char_id": "xiaoguai"},
-            "C": {"text": "友好微笑，但不多说", "char_id": "xiaomei"},
-            "D": {"text": "看心情，有时候主动有时候冷漠", "char_id": "shuazi"}
+            "A": {"text": "和ta对线，谁怕谁", "char_id": "shuazi"},
+            "B": {"text": "懒得理，浪费口舌", "char_id": "xiaoguai"},
+            "C": {"text": "用逻辑把ta说服", "char_id": "zhuangzhuang"},
+            "D": {"text": "笑嘻嘻地附和，看ta表演", "char_id": "baba"}
         }
     },
     {
-        "q": "你最喜欢的天气是？",
+        "q": "你觉得自己最大的缺点是什么？",
         "options": {
-            "A": {"text": "大晴天，可以出去玩", "char_id": "tutu"},
-            "B": {"text": "阴雨天，窝在家睡觉", "char_id": "xiaoguai"},
-            "C": {"text": "下雪天，特别浪漫", "char_id": "xiaomei"},
-            "D": {"text": "无所谓，什么天气都能找到乐子", "char_id": "baba"}
+            "A": {"text": "太贪吃、管不住嘴", "char_id": "tutu"},
+            "B": {"text": "脾气太急、说话太直", "char_id": "shuazi"},
+            "C": {"text": "想太多、容易纠结", "char_id": "zhuangzhuang"},
+            "D": {"text": "太爱操心、管不住自己", "char_id": "mami"}
         }
     },
     {
-        "q": "朋友向你借钱，你会？",
+        "q": "你最想去哪里旅行？",
         "options": {
-            "A": {"text": "能借就借，朋友有困难必须帮", "char_id": "jiankang"},
-            "B": {"text": "问清楚用途再决定", "char_id": "zhuangzhuang"},
-            "C": {"text": "直接拒绝，不想扯上钱", "char_id": "shuazi"},
-            "D": {"text": "借了，但心里一直惦记着", "char_id": "mami"}
+            "A": {"text": "成都——吃遍所有小吃", "char_id": "tutu"},
+            "B": {"text": "西藏——感受神圣和宁静", "char_id": "xiaomei"},
+            "C": {"text": "日本——干净、精致、有秩序", "char_id": "zhuangzhuang"},
+            "D": {"text": "随便哪里，有朋友一起就行", "char_id": "baba"}
         }
     },
     {
-        "q": "你觉得自己像什么动物？",
+        "q": "你对未来的态度是？",
         "options": {
-            "A": {"text": "狗——忠诚快乐", "char_id": "tutu"},
-            "B": {"text": "猫——独立神秘", "char_id": "xiaoguai"},
-            "C": {"text": "老虎——勇敢威猛", "char_id": "shuazi"},
-            "D": {"text": "兔子——温柔可爱", "char_id": "xiaomei"}
+            "A": {"text": "未来嘛，走一步看一步", "char_id": "tutu"},
+            "B": {"text": "我已经做好了五年规划", "char_id": "zhuangzhuang"},
+            "C": {"text": "相信未来会越来越好", "char_id": "jiankang"},
+            "D": {"text": "有点焦虑，但不想去想", "char_id": "xiaoguai"}
         }
     },
     {
-        "q": "朋友说你'太幼稚了'，你会？",
+        "q": "用一句话形容自己，你会说？",
         "options": {
-            "A": {"text": "觉得这是夸奖，快乐最重要", "char_id": "tutu"},
-            "B": {"text": "有点不开心，但想想算了", "char_id": "xiaomei"},
-            "C": {"text": "反驳：'这叫童心未泯'", "char_id": "baba"},
-            "D": {"text": "反思一下自己哪里不够成熟", "char_id": "zhuangzhuang"}
+            "A": {"text": "我是快乐的吃货，烦恼吃完就忘", "char_id": "tutu"},
+            "B": {"text": "我是勇敢的战士，不轻易认输", "char_id": "shuazi"},
+            "C": {"text": "我是温柔的小太阳，温暖身边的人", "char_id": "xiaomei"},
+            "D": {"text": "我是冷静的智者，用脑子解决问题", "char_id": "zhuangzhuang"}
         }
     }
 ]
@@ -368,7 +368,7 @@ st.markdown('<div class="sub-title">测一测你是《大耳朵图图》里的�
 with st.sidebar:
     st.header("📱 扫码访问")
     app_url = "https://hutu-test-ih9koxugfjcycv3xxeahsg.streamlit.app"
-    
+
     try:
         qr = qrcode.QRCode(version=1, box_size=8, border=2)
         qr.add_data(app_url)
@@ -440,7 +440,6 @@ if not st.session_state.finished:
         with col1:
             if q_index > 0:
                 if st.button("⬅️ 上一题", use_container_width=True):
-                    # 回退：减去上一题的分数
                     if st.session_state.answers:
                         last_answer = st.session_state.answers.pop()
                         prev_q = QUESTIONS[q_index - 1]
@@ -469,35 +468,78 @@ else:
     top_id = sorted_scores[0][0]
     top_char = next(c for c in CHARACTERS if c["id"] == top_id)
 
+    # 计算匹配度
+    total_score = sum(scores.values())
+    pct = int(scores[top_id] / total_score * 100) if total_score > 0 else 0
+
+    # 根据匹配度给不同的幽默评价
+    if pct >= 60:
+        mood = "🎉 亲生的！你就是翻斗花园本园！"
+    elif pct >= 45:
+        mood = "😄 太像了！你怕不是从动画片里走出来的！"
+    elif pct >= 30:
+        mood = "🤔 有点意思！你跟ta有八分相似！"
+    else:
+        mood = "😏 你确定你不是在演ta？再测一次试试！"
+
     st.balloons()
     st.markdown("---")
     st.markdown(f'<div class="result-box">', unsafe_allow_html=True)
-    st.markdown(f'<div class="name">{top_char["emoji"]} 你是：{top_char["name"]}！</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="name">{top_char["emoji"]} 你就是：{top_char["name"]}！</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="label">{top_char["label"]}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div style="font-size:0.9rem;color:#888;margin:5px 0;">{mood}</div>', unsafe_allow_html=True)
 
-    total_score = sum(scores.values())
-    if total_score > 0:
-        pct = int(scores[top_id] / total_score * 100)
-        st.markdown(f"**匹配度：{pct}%**")
-        st.progress(pct / 100)
+    st.markdown(f"**匹配度：{pct}%**")
+    st.progress(pct / 100)
 
     st.markdown("**性格标签：**" + " ".join([f'<span class="tag">{tag}</span>' for tag in top_char["tags"]]), unsafe_allow_html=True)
     st.markdown(f'<div class="desc">{top_char["description"]}</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="quote">💬 {top_char["quote"]}</div>', unsafe_allow_html=True)
     st.markdown(f"**🎯 适合你的职业：**{top_char['career']}")
 
+    # 趣味附加信息
+    funny_extra = {
+        "tutu": "🍔 温馨提示：做这个测试消耗了50卡路里，建议奖励自己一顿好的！",
+        "shuazi": "💪 温馨提示：你的气场太强了，建议偶尔也温柔一点～",
+        "xiaomei": "🌸 温馨提示：你这么可爱，小心被图图缠上！",
+        "zhuangzhuang": "🧠 温馨提示：偶尔也让脑子休息一下，学学图图傻乐～",
+        "mami": "🔥 温馨提示：火气大的时候默念'亲生的亲生的'",
+        "baba": "🎤 温馨提示：下次KTV请务必叫上我！",
+        "xiaoguai": "🐱 温馨提示：高冷可以，但别冷到朋友哦～",
+        "jiankang": "🌟 温馨提示：你这么正能量，建议去当幼儿园老师！",
+        "niuyeye": "🏠 温馨提示：面冷心热的人最值得交朋友！",
+        "kuaikuai": "💨 温馨提示：慢一点，生活不是比赛～",
+        "yeye": "🌾 温馨提示：倔强可以，别倔到把牛都拉跑了！",
+        "xiaodouding": "👶 温馨提示：想要什么就直接说，别哭！",
+        "dahu": "🐯 温馨提示：捣蛋可以，记得帮妈妈收拾！",
+        "tiaotiao": "🦘 温馨提示：歇会儿吧，我看得都累了！",
+        "wangzi": "🤴 温馨提示：表演欲这么强，建议去学表演！"
+    }
+
+    st.markdown(f'<div style="margin-top:15px;padding:10px 16px;background:#fff;border-radius:10px;font-size:0.9rem;color:#888;">😄 {funny_extra.get(top_id, "你真是太有趣了！")}</div>', unsafe_allow_html=True)
+
     st.markdown("---")
     st.markdown("### 📊 你的角色匹配排名")
     for i, (char_id, score) in enumerate(sorted_scores[:5]):
         char = next(c for c in CHARACTERS if c["id"] == char_id)
-        pct = int(score / total_score * 100) if total_score > 0 else 0
-        st.markdown(f"{i+1}. {char['emoji']} {char['name']} — {pct}%")
+        pct_i = int(score / total_score * 100) if total_score > 0 else 0
+        if i == 0:
+            st.markdown(f"🥇 {char['emoji']} {char['name']} — {pct_i}% ⭐ 你就是ta！")
+        elif i == 1:
+            st.markdown(f"🥈 {char['emoji']} {char['name']} — {pct_i}%")
+        elif i == 2:
+            st.markdown(f"🥉 {char['emoji']} {char['name']} — {pct_i}%")
+        else:
+            st.markdown(f"   {i+1}. {char['emoji']} {char['name']} — {pct_i}%")
 
     st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown("---")
     st.markdown("📤 **分享给朋友，看看ta是翻斗花园的谁？**")
     col1, col2, col3 = st.columns(3)
+    with col1:
+        share_text = f"🏠 我测了翻斗花园人格测试，我是{top_char['name']}！{top_char['emoji']} 快来测测你是《大耳朵图图》里的谁？ 👉 {app_url}"
+        st.code(share_text, language="text")
     with col2:
         if st.button("🔄 再测一次", use_container_width=True):
             st.session_state.current_q = 0
