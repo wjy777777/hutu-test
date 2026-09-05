@@ -538,15 +538,6 @@ st.markdown("""
         border-top: 1px solid #eee;
     }
     
-    .qr-container {
-        background: white;
-        padding: 20px;
-        border-radius: 16px;
-        text-align: center;
-        margin-top: 10px;
-        border: 1px solid #f0ebe5;
-    }
-    
     .bottom-buttons {
         margin-top: 20px;
     }
@@ -576,9 +567,9 @@ st.markdown("""
 st.markdown('<div class="main-title">🏠 翻斗花园人格测试</div>', unsafe_allow_html=True)
 st.markdown('<div class="sub-title">测一测你是《大耳朵图图》里的谁？</div>', unsafe_allow_html=True)
 
-# 侧边栏
+# 侧边栏 - 简洁版（已去掉多余方框）
 with st.sidebar:
-    st.header("📱 扫码访问")
+    st.markdown("### 📱 扫码测试")
     app_url = "https://hutu-test-ih9koxugfjcycv3xxeahsg.streamlit.app"
 
     try:
@@ -589,8 +580,7 @@ with st.sidebar:
         buf = BytesIO()
         qr_img.save(buf, format="PNG")
         buf.seek(0)
-        st.markdown('<div class="qr-container">', unsafe_allow_html=True)
-        st.image(buf, caption="扫码测试", use_container_width=True)
+        st.image(buf, caption="📱 手机扫码立即测试", use_container_width=True)
         st.download_button(
             label="⬇️ 下载二维码",
             data=buf.getvalue(),
@@ -598,7 +588,6 @@ with st.sidebar:
             mime="image/png",
             use_container_width=True
         )
-        st.markdown('</div>', unsafe_allow_html=True)
     except:
         st.caption("部署后自动生成二维码")
 
